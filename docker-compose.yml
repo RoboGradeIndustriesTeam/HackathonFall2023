@@ -7,7 +7,6 @@ services:
       - .env.docker
     links:
       - db
-      - supertokens
     ports:
       - "3001:3000"
   db:
