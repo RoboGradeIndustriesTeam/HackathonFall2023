@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  app:
+    build: .
+    env_file:
+      - .env.docker
+    links:
+      - db
+      - supertokens
+    ports:
+      - "3001:3000"
+  db:
+    image: mongo
