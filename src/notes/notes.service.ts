@@ -13,20 +13,20 @@ export class NotesService {
     @InjectModel(NoteView.name) private noteViewModel: Model<NoteView>,
   ) {}
 
-  async createNote(
+  async     createNote(
     title: string,
     body: string,
     subtitle: string,
     author: User | null,
     authorName: string,
-    burnable: boolean,
+    burnable: number,
     theme: string
   ): Promise<Note> {
     const d = new Date();
     let slg = slug(title) + "-" + d.getMonth() + "-" + d.getDate();
     const candidate = await this.noteModel.findOne({
       slug: slg,
-    });
+    }); 
     if (candidate) {
       slg = slg + "-" + Date.now();
     }
@@ -58,10 +58,10 @@ export class NotesService {
     });
   }
 
-  async getUserNotes(userId: string): Promise<Note[]> {
+  async getUserNotes(user: User): Promise<Note[]> {
     return await this.noteModel.find({
-      author: userId,
-      burnable: false
+      author: user,
+      burnable: -1 
     });
   }
 
@@ -76,9 +76,17 @@ export class NotesService {
         finger: f,
         note: n
       });
-      if (n.burnable) {
-        return await this.noteModel.deleteOne({
+      if (n.burnable !== -1) {
+        if (n.burnable - 1 === 0)
+            return await this.noteModel.deleteOne({
+                _id: n._id
+            })
+        else return await this.noteModel.updateOne({
             _id: n._id
+        }, {
+            $inc: {
+                burnable: -1    
+            }
         })
       }
       return await this.noteModel.updateOne({
@@ -92,6 +100,6 @@ export class NotesService {
   }
 
   async importFromTelegraph() {
-        
+
   }
 }

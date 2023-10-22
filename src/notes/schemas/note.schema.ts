@@ -31,8 +31,8 @@ export class Note {
   @Prop({default: 0})
   views: number;
 
-  @Prop({default: false})
-  burnable: boolean;
+  @Prop({default: -1})
+  burnable: number;
 
   @Prop({default: "default"})
   theme: string;

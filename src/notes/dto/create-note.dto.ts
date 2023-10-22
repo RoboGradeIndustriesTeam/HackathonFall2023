@@ -7,6 +7,6 @@ export interface CreateNoteDto {
 
 export interface CreateAnonymousNoteDto extends CreateNoteDto {
     authorName: string;
-    burnable: boolean;
+    burnable: number;
 
 }

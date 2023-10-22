@@ -60,7 +60,7 @@ export class TelegraphImportService {
       const authorName = data.result.author_name;
       const htmlBody = this.nodeToHtml(data.result.content[0]);
       
-      return await this.noteService.createNote(title, htmlBody, subtitle, null, authorName, false, "default");
+      return await this.noteService.createNote(title, htmlBody, subtitle, null, authorName, -1, "default");
     }
     return null;
   }

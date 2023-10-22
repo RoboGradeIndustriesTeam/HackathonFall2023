@@ -49,7 +49,7 @@ export class NotesController {
       body.subtitle,
       req.user as User,
       req.user.username,
-      false,
+      -1,
       body.theme
     );
   }
@@ -85,7 +85,7 @@ export class NotesController {
 
   @Get("/user/:username")
   async getUserNotes(@Param("username") username: string) {
-    return await this.noteService.getUserNotes((await this.usersService.findUserByName(username))._id.toString());
+    return await this.noteService.getUserNotes(await this.usersService.findUserByName(username));
   }
 
   @Post("/import/telegraph/:telegraphSlug")
