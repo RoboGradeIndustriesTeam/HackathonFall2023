@@ -16,12 +16,16 @@ import { CreateAnonymousNoteDto, CreateNoteDto } from "./dto/create-note.dto";
 import { NotesService } from "./notes.service";
 import { User } from "src/users/schemas/user.schema";
 import { UsersService } from "src/users/users.service";
+import { TelegraphImportService } from "./telegra-ph-import.service";
+import { Roles } from "src/auth/roles.decorator";
+import { Role } from "src/auth/role.enum";
 
 @Controller("notes")
 export class NotesController {
   constructor(
     private noteService: NotesService,
     private usersService: UsersService,
+    private telegraphImportService: TelegraphImportService
   ) {}
   @Post("anonymous")
   async createNotes(@Body() body: CreateAnonymousNoteDto) {
@@ -31,6 +35,8 @@ export class NotesController {
       body.subtitle,
       null,
       body.authorName,
+      body.burnable,
+      body.theme
     );
   }
 
@@ -43,6 +49,8 @@ export class NotesController {
       body.subtitle,
       req.user as User,
       req.user.username,
+      false,
+      body.theme
     );
   }
 
@@ -71,6 +79,7 @@ export class NotesController {
       throw new BadRequestException("Статья не найдена");
     }
     if (finger !== null) await this.noteService.upViews(slug, finger);
+
     return nt;
   }
 
@@ -78,4 +87,17 @@ export class NotesController {
   async getUserNotes(@Param("username") username: string) {
     return await this.noteService.getUserNotes((await this.usersService.findUserByName(username))._id.toString());
   }
+
+  @Post("/import/telegraph/:telegraphSlug")
+  async importFromTelegrap(@Param("telegraphSlug") tgphSlug) {
+    return await this.telegraphImportService.importFromTelegraph(tgphSlug)
+  }
+
+    //    /* ADMIN REGION */
+    //    @Get('all')
+    //    @Roles(Role.Admin)
+    //    async getAllNotes() {
+    //        return await this.noteService.findAll()
+    //    }
+
 }

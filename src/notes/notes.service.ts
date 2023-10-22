@@ -19,6 +19,8 @@ export class NotesService {
     subtitle: string,
     author: User | null,
     authorName: string,
+    burnable: boolean,
+    theme: string
   ): Promise<Note> {
     const d = new Date();
     let slg = slug(title) + "-" + d.getMonth() + "-" + d.getDate();
@@ -35,6 +37,8 @@ export class NotesService {
       subtitle,
       author: author,
       authorName: (author || { username: null }).username || authorName,
+      burnable,
+      theme
     });
     await nt.save();
     return nt;
@@ -57,6 +61,7 @@ export class NotesService {
   async getUserNotes(userId: string): Promise<Note[]> {
     return await this.noteModel.find({
       author: userId,
+      burnable: false
     });
   }
 
@@ -71,6 +76,11 @@ export class NotesService {
         finger: f,
         note: n
       });
+      if (n.burnable) {
+        return await this.noteModel.deleteOne({
+            _id: n._id
+        })
+      }
       return await this.noteModel.updateOne({
         slug: s,
       }, {
@@ -79,5 +89,9 @@ export class NotesService {
         },
       });
     }
+  }
+
+  async importFromTelegraph() {
+        
   }
 }

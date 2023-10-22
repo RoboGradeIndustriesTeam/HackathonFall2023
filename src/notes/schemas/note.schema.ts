@@ -30,6 +30,12 @@ export class Note {
 
   @Prop({default: 0})
   views: number;
+
+  @Prop({default: false})
+  burnable: boolean;
+
+  @Prop({default: "default"})
+  theme: string;
 }
 
 export const NoteSchema = SchemaFactory.createForClass(Note);
