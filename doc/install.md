@@ -8,5 +8,5 @@
 2. [Установка NodeJS](./2-node.md)
 3. [Клонирование репозиториев](./3-repo-clone.md)
 4. [Запуск сервиса backend](./4-backend.md)
-5. [Запуск сервиса froend](./5-frontemd.md)
+5. [Запуск сервиса frontend](./5-frontemd.md)
 6. [Настройка доменных имён и reverse-proxy через nginx](./6-domains.md)
